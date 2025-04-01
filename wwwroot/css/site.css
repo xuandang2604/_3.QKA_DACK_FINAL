@@ -1,0 +1,140 @@
+﻿html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+.navbar-dark .nav-link {
+    color: #ffffff !important; /* Màu ch? tr?ng */
+    font-weight: 500;
+}
+
+    .navbar-dark .nav-link:hover {
+        color: #ffcc00 !important; /* Màu vàng khi hover */
+    }
+
+.navbar-dark .btn-outline-light {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+    .navbar-dark .btn-outline-light:hover {
+        background-color: #ffcc00;
+        color: #343a40;
+    }
+
+.auth-menu-container {
+    padding: 10px 0;
+    margin-top: 10px; /* Tạo khoảng cách với viền trên */
+}
+
+.auth-menu {
+    display: flex; /* Căn ngang */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    gap: 20px; /* Khoảng cách giữa các mục */
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.auth-item {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+    /* Style cho nút */
+    .auth-item a,
+    .auth-item button {
+        text-decoration: none;
+        color: #fff;
+        padding: 12px 20px;
+        border-radius: 8px;
+        transition: all 0.3s ease-in-out;
+        background-color: #e7ab3c;
+        border: none;
+        font-size: 18px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.15); /* Đổ bóng nhẹ */
+    }
+
+        /* Hiệu ứng hover */
+        .auth-item a:hover,
+        .auth-item button:hover {
+            background-color: #d18f2a;
+            box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3); /* Đổ bóng mạnh hơn khi hover */
+            transform: translateY(-2px); /* Nhẹ nhàng nâng nút lên */
+        }
+
+        /* Hiệu ứng nhấp chuột */
+        .auth-item a:active,
+        .auth-item button:active {
+            transform: translateY(1px);
+            box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hiệu ứng nền khi hover (ánh sáng lan tỏa) */
+        .auth-item a::before,
+        .auth-item button::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 300%;
+            height: 300%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.4) 10%, transparent 40%);
+            transition: all 0.4s ease;
+            transform: translate(-50%, -50%) scale(0);
+        }
+
+        .auth-item a:hover::before,
+        .auth-item button:hover::before {
+            transform: translate(-50%, -50%) scale(1);
+            opacity: 0;
+        }
+
+
+
+
+
+
+.star-rating {
+    direction: rtl;
+    display: inline-block;
+    font-size: 2rem;
+}
+
+    .star-rating input[type="radio"] {
+        display: none;
+    }
+
+    .star-rating label {
+        color: lightgray;
+        cursor: pointer;
+        transition: color 0.2s;
+    }
+
+    .star-rating input[type="radio"]:checked ~ label {
+        color: gold;
+    }
+
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+        color: gold;
+    }

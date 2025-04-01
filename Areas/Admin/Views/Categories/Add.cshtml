@@ -1,0 +1,19 @@
+﻿@model Category
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using _3.QKA_DACK.Models.CategoryModels
+@{
+    ViewData["Title"] = "Add Category 🚀😊";
+}
+<h2 class="text-center mt-4"><i class="fas fa-plus-circle text-primary"></i> @ViewData["Title"]</h2>
+<form asp-action="Add" method="post" enctype="multipart/form-data" class="mt-4">
+    <div class="form-group">
+        <label asp-for="Name">
+            <i class="fas fa-tag"></i> Name
+        </label>
+        <input asp-for="Name" class="form-control" placeholder="Enter category name " />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-success">
+        <i class="fas fa-check"></i> Add
+    </button>
+</form>

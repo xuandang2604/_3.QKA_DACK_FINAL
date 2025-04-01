@@ -1,0 +1,31 @@
+﻿@model Cart
+@using _3.QKA_DACK.Models.CartModels
+@using _3.QKA_DACK.Resources
+@inject LocalizationService LocService
+
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+<style>
+    .nav-link {
+        font-family: "Arial", "Helvetica", "sans-serif";
+        font-weight: lighter;
+        font-size: 1rem;
+    }   
+</style>
+
+@if (Model.CartItems.Any())
+{
+        <li class="nav-item">
+            <a class="nav-link" asp-area="Admin" asp-controller="Cart" asp-action="Index">
+                <i class="fa-solid fa-cart-shopping"></i> @LocService.GetLocalizedHtmlString("Cart") (@(Model.CartItems?.Count ?? 0))
+            </a>
+        </li>
+}
+else
+{
+	<li class="nav-item">
+		<a class="nav-link" asp-area="Admin" asp-controller="Cart" asp-action="Index">
+			<i class="fa-solid fa-cart-shopping"></i> @LocService.GetLocalizedHtmlString("Cart")
+		</a>
+        </li>
+}

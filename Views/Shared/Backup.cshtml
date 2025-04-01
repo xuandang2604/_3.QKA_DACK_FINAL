@@ -1,0 +1,211 @@
+﻿
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - _3.QKA_DACK</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/_3.QKA_DACK.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+
+    <style>
+        /* Tổng thể */
+        body {
+            background-color: #f4f6f9;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: linear-gradient(135deg, #007bff, #6610f2);
+            padding: 10px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-size: 1.6rem;
+            font-weight: bold;
+            color: white !important;
+        }
+
+        .nav-link {
+            color: #f8f9fa !important;
+            font-weight: 500;
+            transition: 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+            .nav-link:hover {
+                color: #ffdd57 !important;
+                transform: scale(1.05);
+            }
+
+        /* Nội dung chính */
+        .container {
+            margin-top: 40px;
+            max-width: 1200px;
+        }
+
+        .content-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            background: #343a40;
+            color: white;
+            padding: 15px 0;
+            border-radius: 12px 12px 0 0;
+            margin-top: 40px;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+            footer a {
+                color: #ffdd57;
+                text-decoration: none;
+                transition: 0.3s;
+            }
+
+                footer a:hover {
+                    text-decoration: underline;
+                }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark mx-3 mt-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                    <i class="fa-solid fa-house-chimney"></i> _3.QKA_DACK
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                                <i class="fa-solid fa-box-open"></i> All Products
+                            </a>
+                        </li>
+                        @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Add">
+                                    <i class="fa-solid fa-circle-plus"></i> Add Product
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index">
+                                    <i class="fa-solid fa-layer-group"></i> All Categories
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Add">
+                                    <i class="fa-solid fa-square-plus"></i> Add Category
+                                </a>
+                            </li>
+                        }
+                        @if (User.IsInRole("Employee"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="MonthlyRevenue">
+                                    <i class="fa-solid fa-chart-line"></i> Turnover
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">
+                                <i class="fa-solid fa-cart-shopping"></i> Orders
+                            </a>
+                    </ul>
+                    @*<ul>
+                        <li><a asp-controller="Home" asp-action="SetLanguage" asp-route-culture="vi" asp-route-returnUrl="@Context.Request.Path">🇻🇳 Tiếng Việt</a></li>
+                        <li><a asp-controller="Home" asp-action="SetLanguage" asp-route-culture="en" asp-route-returnUrl="@Context.Request.Path">🇺🇸 English</a></li>
+                    </ul>*@
+
+                    <div class="navbar-nav" id="cart-summary">
+                        @await Component.InvokeAsync("CartSummary")
+                    </div>
+                    <partial name="_LoginPartial" />
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+
+        <div class="content-card">
+            @RenderBody()
+        </div>
+
+    </main>
+    <footer>
+        <div class="container">
+            &copy; 2025 - _3.QKA_DACK -
+            <a asp-controller="Home" asp-action="Privacy">
+                <i class="fa-solid fa-lock"></i> Privacy
+            </a>
+        </div>
+    </footer>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

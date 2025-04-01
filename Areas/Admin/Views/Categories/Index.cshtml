@@ -1,0 +1,48 @@
+﻿@model IEnumerable<Category>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@using _3.QKA_DACK.Models.CategoryModels
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<h2 class="text-center text-primary my-4">@ViewData["Title"]</h2>
+
+<div class="container">
+    <div class="card shadow-lg p-4">
+        <div class="d-flex justify-content-between mb-3">
+            <h4 class="text-secondary">Category List</h4>
+            <a asp-action="Add" class="btn btn-success">
+                <i class="fas fa-plus"></i> Add Category
+            </a>
+        </div>
+
+        <table class="table table-hover table-bordered text-center align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col" class="w-75">Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var category in Model)
+                {
+                    <tr>
+                        <td class="text-start">@category.Name</td>
+                        <td>
+                            <a asp-action="Display" asp-route-id="@category.Id" class="btn btn-info btn-sm">
+                                <i class="fas fa-edit"></i> Details
+                            </a>
+
+                            <a asp-action="Update" asp-route-id="@category.Id" class="btn btn-warning btn-sm">
+                                <i class="fas fa-edit"></i> Edit
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@category.Id" class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash-alt"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

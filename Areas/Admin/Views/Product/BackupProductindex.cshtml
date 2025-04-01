@@ -1,0 +1,121 @@
+﻿@model IEnumerable<Product>
+@using Microsoft.AspNetCore.Identity
+@using _3.QKA_DACK.Models.ProductModels
+@using _3.QKA_DACK.Models.Another
+@using _3.QKA_DACK.Resources
+
+@inject LocalizationService LocService
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Products";
+}
+
+<h2 class="my-4 text-center text-primary">@LocService.GetLocalizedHtmlString("Product List")</h2>
+
+<main class="container mt-4">
+    <div class="row">
+        <!-- Cột bên trái: Category Menu -->
+        <div class="col-md-3">
+            @await Component.InvokeAsync("CategoryMenu")
+        </div>
+
+        <!-- Cột bên phải: Nội dung sản phẩm -->
+        <div class="col-md-9">
+            <div class="content-card">
+
+                <form method="get" asp-action="Index">
+                    <input type="hidden" name="categoryId" value="@Context.Request.Query["categoryId"]" />
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <input type="text" name="searchString" class="form-control" placeholder=@LocService.GetLocalizedHtmlString("placeholder") value="@Context.Request.Query["searchString"]" />
+                        </div>
+                        <div class="col-md-3">
+                            <select name="sortOrder" class="form-select" onchange="this.form.submit()">
+                                <option value="">@LocService.GetLocalizedHtmlString("Sort")</option>
+                                <option value="price_asc" selected="@(Context.Request.Query["sortOrder"] == "price_asc")">@LocService.GetLocalizedHtmlString("LowHigh")</option>
+                                <option value="price_desc" selected="@(Context.Request.Query["sortOrder"] == "price_desc")">@LocService.GetLocalizedHtmlString("HighLow")</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" class="btn btn-primary">@LocService.GetLocalizedHtmlString("Search")</button>
+                        </div>
+                        <div class="col-md-2">
+                            @if (Context.Request.Query["categoryId"].Count > 0)
+                            {
+                                <a href="@Url.Action("Index", new { categoryId = (int?)null, searchString = string.Empty, sortOrder = string.Empty })" class="btn btn-primary">
+                                    View All Products
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Hiển thị danh sách sản phẩm -->
+                <table class="table table-striped table-bordered text-center">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>@LocService.GetLocalizedHtmlString("Name")</th>
+                            <th>@LocService.GetLocalizedHtmlString("Price")</th>
+                            <th>@LocService.GetLocalizedHtmlString("Description")</th>
+                            <th>@LocService.GetLocalizedHtmlString("Image")</th>
+                            <th>@LocService.GetLocalizedHtmlString("Category")</th>
+                            <th>@LocService.GetLocalizedHtmlString("Actions")</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var product in Model)
+                        {
+                            <tr>
+                                <td>@product.Name</td>
+                                <td>@product.Price.ToString("C")</td>
+                                <td>@product.Description</td>
+                                <td>
+                                    <img src="@product.ImageUrl" alt="@product.Name" class="img-thumbnail" style="max-width: 100px; max-height: 100px;" />
+                                </td>
+                                <td>@(product.Category?.Name ?? "No Category")</td>
+                                <td>
+                                    <!-- View luôn hiện -->
+                                    <a asp-action="Display" asp-route-id="@product.Id" class="btn btn-info btn-sm mb-1">View</a>
+
+                                    <!-- Employee và Admin mới thấy Edit -->
+                                    @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                                    {
+                                        <a asp-action="Update" asp-route-id="@product.Id" class="btn btn-warning btn-sm mb-1">Edit</a>
+                                    }
+
+                                    <!-- Admin mới thấy Delete -->
+                                    @if (User.IsInRole("Admin"))
+                                    {
+                                        <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm mb-1">Delete</a>
+                                    }
+
+                                    <!-- Customer mới được AddToCart -->
+                                    @if (User.IsInRole("Customer"))
+                                    {
+                                        <form asp-action="AddToCart" method="post" class="mt-1">
+                                            <input type="hidden" name="productId" value="@product.Id" />
+                                            <div class="form-group">
+                                                <input type="number" name="quantity" class="form-control mb-1" value="1" min="1" />
+                                            </div>
+                                            <button type="submit" class="btn btn-primary btn-sm">Add to Cart</button>
+                                        </form>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+                <!-- Admin và Employee mới được Add Product -->
+                @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
+                {
+                    <div class="text-center mt-4">
+                        <a asp-action="Add" class="btn btn-success">Add New Product</a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</main>

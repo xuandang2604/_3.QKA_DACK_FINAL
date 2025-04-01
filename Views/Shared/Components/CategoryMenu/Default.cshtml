@@ -1,0 +1,25 @@
+﻿<ul class="list-group">
+    @foreach (var parentCategory in Model)
+    {
+        <li class="list-group-item">
+            <a href="@Url.Action("Index", new { categoryId = parentCategory.Id })" class="text-decoration-none">
+                @parentCategory.Name
+            </a>
+
+            <!-- Hiển thị danh mục con -->
+            @if (parentCategory.SubCategories != null && parentCategory.SubCategories.Count > 0) 
+            {
+                <ul class="list-group mt-2">
+                    @foreach (var childCategory in parentCategory.SubCategories)
+                    {
+                        <li class="list-group-item">
+                            <a href="@Url.Action("Index", new { categoryId = childCategory.Id })" class="text-decoration-none">
+                                @childCategory.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+    }
+</ul>

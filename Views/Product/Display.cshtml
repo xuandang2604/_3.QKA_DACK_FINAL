@@ -1,0 +1,25 @@
+﻿@model Product
+@using _3.QKA_DACK.Models.ProductModels
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h2 class="card-title text-center">@Model.Name</h2>
+                    <hr />
+                    <h3 class="text-danger">Price: @Model.Price</h3>
+                    <p class="card-text"><strong>Description:</strong> @Model.Description</p>
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <div class="text-center">
+                            <img src="@Model.ImageUrl" alt="Product Image" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                        </div>
+                    }
+                    <div class="text-center mt-3">
+                        <a asp-action="Index" class="btn btn-primary">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

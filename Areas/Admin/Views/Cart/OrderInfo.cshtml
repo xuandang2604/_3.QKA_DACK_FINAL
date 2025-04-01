@@ -1,0 +1,21 @@
+﻿@model Order
+@using _3.QKA_DACK.Models.OrderModels
+@{
+    ViewData["Title"] = "Thông tin đơn hàng";
+}
+
+<h2>Nhập Thông Tin Đơn Hàng</h2>
+
+<form asp-action="ConfirmOrder" method="post">
+    <div class="mb-3">
+        <label for="Address" class="form-label">Địa chỉ giao hàng</label>
+        <input asp-for="@Model.User.Address" class="form-control" required />
+    </div>
+
+    <div class="mb-3">
+        <label for="Note" class="form-label">Ghi chú</label>
+        <textarea asp-for="Note" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-success">Xác Nhận Đặt Hàng</button>
+</form>
