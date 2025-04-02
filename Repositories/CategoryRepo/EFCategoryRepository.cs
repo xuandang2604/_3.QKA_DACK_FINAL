@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using _3.QKA_DACK.Models;
 using _3.QKA_DACK.Models.CategoryModels;
+using Microsoft.AspNetCore.Mvc;
 
 namespace _3.QKA_DACK.Repositories.CategoryRepo
 {
@@ -39,6 +40,40 @@ namespace _3.QKA_DACK.Repositories.CategoryRepo
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<Category>> GetParentCategoriesAsync()
+        {
+            return await _context.Categories
+                .Where(c => c.ParentCategoryId == null)
+                .ToListAsync();
+        }
+
+
+        public async Task<IEnumerable<Category>> GetParentCategoriesAsync(int currentCategoryId)
+        {
+            return await _context.Categories
+                .Where(c => c.ParentCategoryId == null && c.Id != currentCategoryId)
+                .ToListAsync();
+        }
+
+
+        public IEnumerable<Category> GetChildCategories(int parentId)
+        {
+            // Truy vấn để lấy các category con theo parentId
+            return _context.Categories
+                           .Where(c => c.ParentCategoryId == parentId)
+                           .ToList();
+        }
+
+        //public JsonResult GetChildCategories(int parentId)
+        //{
+        //    var childCategories = _context.Categories
+        //        .Where(c => c.ParentCategoryId == parentId)
+        //        .Select(c => new { c.Id, c.Name })
+        //        .ToList();
+
+        //    return Json(childCategories);
+        //}
 
     }
 }

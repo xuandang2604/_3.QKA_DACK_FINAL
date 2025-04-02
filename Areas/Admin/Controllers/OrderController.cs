@@ -150,12 +150,6 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
             return RedirectToAction("PaymentFailed"); // ✅ Nếu thất bại, điều hướng sang trang thất bại
         }
 
-
-
-
-
-
-
         [HttpGet]
         public IActionResult PaymentFailed()
         {

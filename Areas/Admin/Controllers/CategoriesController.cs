@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using _3.QKA_DACK.Models.CategoryModels;
 using _3.QKA_DACK.Repositories.CategoryRepo;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace _3.QKA_DACK.Areas.Admin.Controllers
 {
@@ -21,7 +22,16 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             var categories = await _categoryRepository.GetAllAsync();
+            var parentCategories = await _categoryRepository.GetParentCategoriesAsync();
+
             return View(categories);
+        }
+        [HttpGet("/admin/categories/child/{parentId}")]
+        public JsonResult GetChildCategories(int parentId)
+        {
+            var childCategories = _categoryRepository.GetChildCategories(parentId);
+            var result = childCategories.Select(c => new { c.Id, c.Name }).ToList();
+            return Json(result);
         }
 
         // Hiển thị chi tiết danh mục
@@ -40,8 +50,11 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
         // Hiển thị form thêm danh mục mới
         [Authorize(Roles = "Admin,Employee")]
         [HttpGet("add")]
-        public IActionResult Add()
+        public async Task<IActionResult> Add()
         {
+            var parentCategories = await _categoryRepository.GetParentCategoriesAsync();
+            ViewBag.ParentCategories = new SelectList(parentCategories, "Id", "Name");
+
             return View();
         }
 
@@ -54,6 +67,10 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
                 await _categoryRepository.AddAsync(category);
                 return RedirectToAction(nameof(Index));
             }
+            var parentCategories = await _categoryRepository.GetParentCategoriesAsync();
+            ViewBag.ParentCategories = new SelectList(parentCategories, "Id", "Name");
+
+
             return View(category);
         }
 
@@ -67,9 +84,14 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
             {
                 return NotFound();
             }
+
+            var parentCategories = await _categoryRepository.GetParentCategoriesAsync(id);
+            ViewBag.ParentCategories = new SelectList(parentCategories, "Id", "Name", category.ParentCategoryId);
             return View(category);
         }
 
+
+        
         // Xử lý cập nhật danh mục
         [HttpPost("update/{id}")]
         public async Task<IActionResult> Update(int id, Category category)
@@ -84,6 +106,9 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
                 await _categoryRepository.UpdateAsync(category);
                 return RedirectToAction(nameof(Index));
             }
+
+            var parentCategories = await _categoryRepository.GetParentCategoriesAsync(category.Id);
+            ViewBag.ParentCategories = new SelectList(parentCategories, "Id", "Name", category.ParentCategoryId);
             return View(category);
         }
         [Authorize(Roles = "Admin")]

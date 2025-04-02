@@ -9,5 +9,11 @@ namespace _3.QKA_DACK.Repositories.CategoryRepo
         Task AddAsync(Category category);
         Task UpdateAsync(Category category);
         Task DeleteAsync(int id);
+        Task<IEnumerable<Category>> GetParentCategoriesAsync();
+        Task<IEnumerable<Category>> GetParentCategoriesAsync(int currentCategoryId);
+
+
+        IEnumerable<Category> GetChildCategories(int parentId);
+       // Task<IEnumerable<Category>> GetChildCategoriesAsync(int parentId);
     }
 }
