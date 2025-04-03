@@ -1,0 +1,46 @@
+﻿@model Cart
+@using _3.QKA_DACK.Models.CartModels
+<h2>Your Cart</h2>
+
+@if (Model.CartItems.Count == 0)
+{
+    <p>Your cart is empty.</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.CartItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Product.Price</td>
+                    <td>@(item.Product.Price * item.Quantity)</td>
+                    <td>
+                        <form asp-area="Admin" asp-action="RemoveFromCart" method="post">
+                            <input type="hidden" name="cartItemId" value="@item.Id" />
+                            <button type="submit" class="btn btn-danger">Remove</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <p>Total Quantity: @Model.CartItems.Sum(ci => ci.Quantity)</p>
+    <p>Total Price: @Model.CartItems.Sum(ci => ci.Product.Price * ci.Quantity)</p>
+     <form asp-area="Admin" asp-action="Pay" method="post"> 
+         <button type="submit" class="btn btn-success">Pay</button> 
+     </form> 
+
+}

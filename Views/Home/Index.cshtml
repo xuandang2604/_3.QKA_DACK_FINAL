@@ -1,20 +1,208 @@
-﻿@using Microsoft.AspNetCore.Mvc.Localization
+﻿@model IEnumerable<_3.QKA_DACK.Models.ProductModels.Product>
+@using Microsoft.AspNetCore.Mvc.Localization
 @using Microsoft.Extensions.Localization
 @using _3.QKA_DACK.Resources
 @inject LocalizationService LocalizerService
 
 @{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-items owl-carousel">
+        <div class="single-hero-items set-bg" data-setbg="@Url.Content("~/images/hero-1.jpg")">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <span>Bag, kids</span>
+                        <h1>Black Friday</h1>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+                        <a href="#" class="primary-btn">Shop Now</a>
+                    </div>
+                </div>
+                <div class="off-card">
+                    <h2>Sale <span>50%</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="single-hero-items set-bg" data-setbg="@Url.Content("~/images/hero-2.jpg")">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <span>Shoes, Sports</span>
+                        <h1>Big Discount</h1>
+                        <p>Hurry up! Limited time offer.</p>
+                        <a href="#" class="primary-btn">Shop Now</a>
+                    </div>
+                </div>
+                <div class="off-card">
+                    <h2>Sale <span>30%</span></h2>
+                </div>
+            </div>
+        </div>
+        <div class="single-hero-items set-bg" data-setbg="@Url.Content("~/images/hero-3.jpg")">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <span>Electronics</span>
+                        <h1>New Collection</h1>
+                        <p>Explore the latest products now.</p>
+                        <a href="#" class="primary-btn">Shop Now</a>
+                    </div>
+                </div>
+                <div class="off-card">
+                    <h2>Sale <span>20%</span></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div id="productList">
+    @if (Model != null && Model.Any())
+    {
+        <div class="row">
 
+            @foreach (var item in Model)
+            {
+                <div class="col-lg-4 col-sm-6">
+                    <div class="product-item">
+                        <div class="pi-pic">
+                            <img src="@item.ImageUrl" alt="@item.Name" style="height: 300px; width: 100%;">
+                            <div class="icon">
+                                <i class="icon_heart_alt"></i>
+                            </div>
+                            <ul>
+                                <li class="w-icon active">
+                                    <a href="#"><i class="icon_bag_alt"></i></a>
+                                </li>
+                                <li class="quick-view">
+                                    <a asp-area=""  asp-controller="Product" asp-action="Display" asp-route-id="@item.Id">+ Quick View</a>
+                                </li>
+                                <li class="w-icon">
+                                    <a href="#"><i class="fa fa-random"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="pi-text">
+                            <div class="catagory-name">@item.Category.Name</div>
+                            <a href="#">
+                                <h5>@item.Name</h5>
+                            </a>
+                            <div class="product-price">
+                                @item.Price.ToString("#,##0") Vnđ
+                            </div>
+                            @* <button type="button" class="btn btn-outline-dark add-to-cart mt-2" *@
+                            @*         data-productid="@item.Id" data-quantity="@numOfQuantity"> *@
+                            @*     <i class="bi bi-cart-fill me-1"></i> Add to Cart *@
+                            @* </button> *@
+                        </div>
+                    </div>
+                </div>
+            }
 
-
-
-
-
-<div class="text-center">
-    @* <h1 class="display-4">Welcome</h1> *@
-    @* <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p> *@
-    <h1>@LocalizerService.GetLocalizedHtmlString("Welcome")</h1>
-    <p>@LocalizerService.GetLocalizedHtmlString("Contact")</p>
+        </div>
+    }
+    else
+    {
+        <p class="text-center text-muted">Không có sản phẩm nào phù hợp.</p>
+    }
 </div>
+<style>
+    .product-item {
+        background: #fff;
+        border-radius: 12px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        padding: 15px;
+        margin-bottom: 25px;
+    }
+
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+    .pi-pic {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .pi-text {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+        .pi-text h5 {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+    .product-price {
+        font-size: 16px;
+        font-weight: bold;
+        color: #e7ab3c;
+    }
+
+    .add-to-cart {
+        width: 100%;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s ease, transform 0.2s ease;
+    }
+
+        .add-to-cart:hover {
+            background: #d69534 !important;
+            transform: scale(1.05);
+        }
+
+    .hero-section {
+        position: relative;
+        width: 100%;
+        height: 500px; /* Chiều cao hình chữ nhật */
+        overflow: hidden;
+    }
+
+    .single-hero-items {
+        height: 500px; /* Giữ nguyên chiều cao */
+        background-size: cover;
+        background-position: center;
+        display: flex;
+        align-items: center;
+    }
+
+    .off-card {
+        position: absolute;
+        top: 20px;
+        right: 50px;
+        background: red;
+        padding: 10px 20px;
+        color: white;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px;
+    }
+
+
+</style>
+<!-- Thêm AJAX để cập nhật kết quả tìm kiếm mà không tải lại trang -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#searchForm").submit(function (e) {
+            e.preventDefault(); // Ngăn trang bị load lại
+
+            var searchQuery = $("#searchInput").val();
+
+            $.ajax({
+                url: "/Home/Index",
+                type: "GET",
+                data: { search: searchQuery },
+                success: function (data) {
+                    var htmlContent = $(data).find("#productList").html();
+                    $("#productList").html(htmlContent);
+                }
+            });
+        });
+    });
+</script>

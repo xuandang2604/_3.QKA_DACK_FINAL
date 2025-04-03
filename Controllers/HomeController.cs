@@ -9,6 +9,10 @@ using Microsoft.Extensions.Localization;
 using Microsoft.AspNetCore.Localization;
 using _3.QKA_DACK.Models.Another;
 using _3.QKA_DACK.Resources;
+using _3.QKA_DACK.Repositories.BrandRepo;
+using _3.QKA_DACK.Repositories.ProductRepo;
+using _3.QKA_DACK.Models.CategoryModels;
+using _3.QKA_DACK.Repositories.CategoryRepo;
 
 namespace _3.QKA_DACK.Controllers
 {
@@ -18,22 +22,82 @@ namespace _3.QKA_DACK.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly LocalizationService _localizer;
+        private readonly IProductRepository _productRepository;
+        private readonly IBrandRepository _brandRepository;
+        private readonly ICategoryRepository _categoryRepository;
 
-        public HomeController(LocalizationService localizer, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public HomeController(LocalizationService localizer, ILogger<HomeController> logger, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IProductRepository productRepository, IBrandRepository brandRepository, ICategoryRepository categoryRepository)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
+            _brandRepository = brandRepository;
+            _productRepository = productRepository;
+            _categoryRepository = categoryRepository;
             _localizer = localizer;
 
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? categoryId, string search)
         {
-            //return RedirectToAction("Index", "Product", new { area = "Admin" });
-          //  var Welcome= _localizer.GetLocalizedHtmlString("Welcome");
-            return View();
-        }   
+            var products = await _productRepository.GetAllAsync();
+            // Lấy danh sách danh mục từ cơ sở dữ liệu
+            var categories = await _categoryRepository.GetAllAsync() ?? new List<Category>();
+
+            // Tìm tất cả danh mục cha (ParentCategory == NULL)
+            ViewBag.ParentCategories = categories.Where(c => c.ParentCategory == null).ToList();
+
+            // Lấy danh mục con nếu có categoryId
+            if (categoryId.HasValue)
+            {
+                ViewBag.ChildCategories = categories.Where(c => c.ParentCategoryId == categoryId.Value).ToList();
+            }
+            else
+            {
+                ViewBag.ChildCategories = new List<Category>();
+            }
+
+            // Tìm kiếm theo tên sản phẩm
+            if (!string.IsNullOrEmpty(search))
+            {
+                products = products.Where(p => p.Name.Contains(search, StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            if (categoryId.HasValue)
+            {
+                // Tìm tất cả danh mục con của danh mục cha
+                var selectedCategoryIds = GetAllChildCategoryIds(categoryId.Value, categories.ToList());
+
+                // Lọc sản phẩm theo danh mục cha và con
+                products = products.Where(p => selectedCategoryIds.Contains((int)p.CategoryId)).ToList();
+            }
+
+            // Lấy thông tin thương hiệu cho từng sản phẩm
+            foreach (var product in products)
+            {
+                if (product.BrandId.HasValue)
+                {
+                    product.Brand = await _brandRepository.GetById(product.BrandId.Value);
+                }
+            }
+
+            ViewBag.Search = search;
+            return View(products);
+        }
+        private List<int> GetAllChildCategoryIds(int parentId, List<Category> categories)
+        {
+            // Lấy danh mục con của danh mục cha
+            var childCategories = categories.Where(c => c.ParentCategoryId == parentId).ToList();
+
+            // Khởi tạo danh sách ID danh mục (bao gồm cha và con)
+            var categoryIds = new List<int> { parentId }; // Bắt đầu với danh mục cha
+
+            foreach (var category in childCategories)
+            {
+                categoryIds.AddRange(GetAllChildCategoryIds(category.Id, categories));
+            }
+
+            return categoryIds; // Trả về danh sách ID của cha và con
+        }
 
         public IActionResult Privacy()
         {

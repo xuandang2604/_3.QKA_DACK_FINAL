@@ -1,23 +1,92 @@
-﻿@model Product
+﻿@model ProductDisplayViewModel
 @using _3.QKA_DACK.Models.ProductModels
+@{
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
 <div class="container mt-4">
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <h2 class="card-title text-center">@Model.Name</h2>
+                    <!-- Hiển thị thông tin sản phẩm -->
+                    <h2 class="card-title text-center">@Model.Product.Name</h2>
                     <hr />
-                    <h3 class="text-danger">Price: @Model.Price</h3>
-                    <p class="card-text"><strong>Description:</strong> @Model.Description</p>
-                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    <h3 class="text-danger">Price: @Model.Product.Price</h3>
+                    <p class="card-text"><strong>Description:</strong> @Model.Product.Description</p>
+                    @if (!string.IsNullOrEmpty(Model.Product.ImageUrl))
                     {
                         <div class="text-center">
-                            <img src="@Model.ImageUrl" alt="Product Image" class="img-fluid rounded" style="max-width: 100%; height: auto;">
+                            <img src="@Model.Product.ImageUrl" alt="Product Image" class="img-fluid rounded" style="max-width: 100%; height: auto;">
                         </div>
                     }
+
+                    <!-- Form Add to Cart -->
+                    <form asp-area="" asp-action="AddToCart" method="post">
+                        <input type="hidden" name="productId" value="@Model.Product.Id" />
+                        <div class="form-group">
+                            <label for="quantity">Quantity</label>
+                            <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1" />
+                        </div>
+                        <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    </form>
+
+                    <!-- Back to List Button -->
                     <div class="text-center mt-3">
                         <a asp-action="Index" class="btn btn-primary">Back to List</a>
                     </div>
+
+                    <!-- Đánh giá sản phẩm (Review) -->
+                    <h3 class="mt-4">Đánh giá sản phẩm</h3>
+                    @if (Model.Reviews != null && Model.Reviews.Any())
+                    {
+                        <div class="reviews">
+                            @foreach (var review in Model.Reviews)
+                            {
+                                <div class="review">
+                                    <strong>@review.User.UserName</strong> -
+                                    @for (int i = 1; i <= review.Rating; i++)
+                                    {
+                                        <span>★</span>
+                                    }
+                                    @for (int i = review.Rating + 1; i <= 5; i++)
+                                    {
+                                        <span>☆</span>
+                                    }
+                                    <p>@review.Comment</p>
+                                    <small>@review.CreatedAt.ToString("dd/MM/yyyy")</small>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <p>Chưa có đánh giá cho sản phẩm này.</p>
+                    }
+
+                    <!-- Form để người dùng đánh giá -->
+                    <form method="post" action="@Url.Action("AddReview", "Product")">
+                        <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                        <div class="form-group">
+                            <label for="rating">Rating</label>
+                            <div class="star-rating">
+                                <input type="radio" name="Rating" id="star5" value="5" />
+                                <label for="star5">★</label>
+                                <input type="radio" name="Rating" id="star4" value="4" />
+                                <label for="star4">★</label>
+                                <input type="radio" name="Rating" id="star3" value="3" />
+                                <label for="star3">★</label>
+                                <input type="radio" name="Rating" id="star2" value="2" />
+                                <label for="star2">★</label>
+                                <input type="radio" name="Rating" id="star1" value="1" />
+                                <label for="star1">★</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <textarea name="Comment" class="form-control" placeholder="Thêm bình luận..." required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thêm đánh giá</button>
+                    </form>
                 </div>
             </div>
         </div>

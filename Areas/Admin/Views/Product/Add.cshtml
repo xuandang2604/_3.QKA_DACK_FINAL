@@ -7,45 +7,56 @@
     ViewData["Title"] = "Add Product";
 }
 
-<h2 class="text-center text-primary my-4">@ViewData["Title"]</h2>
-
-<div class="container">
-    <div class="card shadow-lg p-4">
-        <form asp-action="Add" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
-                <label asp-for="Name" class="form-label fw-bold"></label>
-                <input asp-for="Name" class="form-control" placeholder="Enter product name" />
-                <span asp-validation-for="Name" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Price" class="form-label fw-bold"></label>
-                <input asp-for="Price" type="number" class="form-control" placeholder="Enter product price" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="Description" class="form-label fw-bold"></label>
-                <textarea asp-for="Description" class="form-control" rows="3" placeholder="Enter product description"></textarea>
-                <span asp-validation-for="Description" class="text-danger"></span>
-            </div>
-            <div class="mb-3">
-                <label asp-for="CategoryId" class="form-label fw-bold">Category</label>
-                <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-select">
-                    <option value="">-- Select a Category --</option>
-                </select>
-            </div>
-            <div class="mb-3">
-                <label asp-for="ImageUrl" class="form-label fw-bold">Product Image</label>
-                <input type="file" asp-for="ImageUrl" class="form-control" id="imageInput" />
-            </div>
-            <div class="mb-3 text-center">
-                <img src="@Model?.ImageUrl ?? " /path/to/default/image.jpg"" alt="Product Image" class="img-thumbnail" style="max-width: 200px;" id="previewImage" />
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-success px-4">Add Product</button>
-                <a asp-action="Index" class="btn btn-secondary px-4">Cancel</a>
-            </div>
-        </form>
+<h2>Add Product</h2>
+<form asp-action="Add" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
+    <div class="form-group">
+        <label asp-for="Price"></label>
+        <input asp-for="Price" class="form-control" />
+        <span asp-validation-for="Price" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Stock"></label>
+        <input asp-for="Stock" class="form-control" />
+        <span asp-validation-for="Stock" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Size"></label>
+        <input asp-for="Size" class="form-control" />
+        <span asp-validation-for="Size" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Color"></label>
+        <input asp-for="Color" class="form-control" />
+        <span asp-validation-for="Color" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Description">Description</label>
+        <textarea asp-for="Description" class="form-control" id="editor" placeholder="Enter product description"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="CategoryId">Category</label>
+        <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="form-control"></select>
+    </div>
+    <div class="form-group">
+        <label asp-for="BrandId">Brand</label>
+        <select asp-for="BrandId" asp-items="ViewBag.Brand" class="form-control"></select>
+        <span asp-validation-for="BrandId" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ImageUrl">Product Image</label>
+        <input type="file" asp-for="ImageUrl" class="form-control" id="imageInput" title="Upload product image" />
+    </div>
+    <button type="submit" class="btn btn-primary">Add</button>
+</form>
+
+<div class="col-8" id="imagePreviewContainer" style="display:none;">
+    <img src="" alt="Product Image" style="max-width:200px;" id="previewImage" />
 </div>
 
 <script>
@@ -54,9 +65,13 @@
         if (file) {
             const reader = new FileReader();
             reader.onload = function (e) {
-                document.getElementById("previewImage").src = e.target.result;
+                const img = document.getElementById("previewImage");
+                img.src = e.target.result;
+                document.getElementById('imagePreviewContainer').style.display = 'block';
             };
             reader.readAsDataURL(file);
+        } else {
+            document.getElementById('imagePreviewContainer').style.display = 'none';
         }
     });
 </script>

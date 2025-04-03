@@ -1,15 +1,15 @@
 ﻿<ul class="list-group">
     @foreach (var parentCategory in Model)
     {
-        <li class="list-group-item">
+        <li class="list-group-item position-relative">
             <a href="@Url.Action("Index", new { categoryId = parentCategory.Id })" class="text-decoration-none">
                 @parentCategory.Name
             </a>
 
-            <!-- Hiển thị danh mục con -->
-            @if (parentCategory.SubCategories != null && parentCategory.SubCategories.Count > 0) 
+            <!-- Hiển thị danh mục con khi hover -->
+            @if (parentCategory.SubCategories != null && parentCategory.SubCategories.Count > 0)
             {
-                <ul class="list-group mt-2">
+                <ul class="list-group position-absolute start-100 top-0 mt-1 bg-white shadow-sm border rounded sub-menu">
                     @foreach (var childCategory in parentCategory.SubCategories)
                     {
                         <li class="list-group-item">
@@ -23,3 +23,28 @@
         </li>
     }
 </ul>
+
+<style>
+    
+    .list-group-item {
+        position: relative;
+    }
+
+    .sub-menu {
+        display: none;
+        position: absolute;
+        left: 100%;
+        top: 0;
+        min-width: 200px;
+        background: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        border-radius: 5px;
+        z-index: 1000;
+    }
+
+    .list-group-item:hover > .sub-menu,
+    .list-group-item .sub-menu:hover {
+        display: block;
+    }
+
+</style>

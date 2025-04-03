@@ -155,7 +155,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.ApplicationUser", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.Another.ApplicationUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -229,7 +229,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Brand", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.BrandModels.Brand", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -246,7 +246,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("Brands");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Cart", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CartModels.Cart", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -265,7 +265,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("Carts");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.CartItem", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CartModels.CartItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -291,7 +291,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Category", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CategoryModels.Category", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -313,7 +313,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Order", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.OrderModels.Order", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -344,7 +344,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("Orders");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.OrderItem", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.OrderModels.OrderItem", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -373,7 +373,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("OrderItems");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Product", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.Product", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -422,7 +422,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.ProductImage", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.ProductImage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -444,7 +444,7 @@ namespace _3.QKA_DACK.Migrations
                     b.ToTable("ProductImages");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Review", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.Review", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -489,7 +489,7 @@ namespace _3.QKA_DACK.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", null)
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -498,7 +498,7 @@ namespace _3.QKA_DACK.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", null)
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -513,7 +513,7 @@ namespace _3.QKA_DACK.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", null)
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -522,16 +522,16 @@ namespace _3.QKA_DACK.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", null)
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Cart", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CartModels.Cart", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", "User")
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -540,15 +540,15 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.CartItem", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CartModels.CartItem", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.Cart", "Cart")
+                    b.HasOne("_3.QKA_DACK.Models.CartModels.Cart", "Cart")
                         .WithMany("CartItems")
                         .HasForeignKey("CartId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_3.QKA_DACK.Models.Product", "Product")
+                    b.HasOne("_3.QKA_DACK.Models.ProductModels.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -559,18 +559,18 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Category", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CategoryModels.Category", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.Category", "ParentCategory")
+                    b.HasOne("_3.QKA_DACK.Models.CategoryModels.Category", "ParentCategory")
                         .WithMany("SubCategories")
                         .HasForeignKey("ParentCategoryId");
 
                     b.Navigation("ParentCategory");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Order", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.OrderModels.Order", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", "User")
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -579,15 +579,15 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.OrderItem", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.OrderModels.OrderItem", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.Order", "Order")
+                    b.HasOne("_3.QKA_DACK.Models.OrderModels.Order", "Order")
                         .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_3.QKA_DACK.Models.Product", "Product")
+                    b.HasOne("_3.QKA_DACK.Models.ProductModels.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -598,13 +598,13 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Product", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.Product", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.Brand", "Brand")
+                    b.HasOne("_3.QKA_DACK.Models.BrandModels.Brand", "Brand")
                         .WithMany("Products")
                         .HasForeignKey("BrandId");
 
-                    b.HasOne("_3.QKA_DACK.Models.Category", "Category")
+                    b.HasOne("_3.QKA_DACK.Models.CategoryModels.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId");
 
@@ -613,9 +613,9 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.ProductImage", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.ProductImage", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.Product", "Product")
+                    b.HasOne("_3.QKA_DACK.Models.ProductModels.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -624,15 +624,15 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Review", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.Review", b =>
                 {
-                    b.HasOne("_3.QKA_DACK.Models.Product", "Product")
+                    b.HasOne("_3.QKA_DACK.Models.ProductModels.Product", "Product")
                         .WithMany("Reviews")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("_3.QKA_DACK.Models.ApplicationUser", "User")
+                    b.HasOne("_3.QKA_DACK.Models.Another.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -643,29 +643,29 @@ namespace _3.QKA_DACK.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Brand", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.BrandModels.Brand", b =>
                 {
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Cart", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CartModels.Cart", b =>
                 {
                     b.Navigation("CartItems");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Category", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.CategoryModels.Category", b =>
                 {
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Order", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.OrderModels.Order", b =>
                 {
                     b.Navigation("OrderItems");
                 });
 
-            modelBuilder.Entity("_3.QKA_DACK.Models.Product", b =>
+            modelBuilder.Entity("_3.QKA_DACK.Models.ProductModels.Product", b =>
                 {
                     b.Navigation("Reviews");
                 });

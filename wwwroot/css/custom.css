@@ -107,14 +107,3 @@ h4, h5 {
     object-fit: cover; /* Cắt ảnh để giữ tỷ lệ */
     display: block;
 }
-.btn-primary {
-    background-color: #0056b3; /* Darker blue shade */
-    border-color: #004494; /* Border matching the blue tone */
-    color: #ffffff; /* Text color */
-}
-
-    .btn-primary:hover {
-        background-color: #003f8a; /* Even darker blue on hover */
-        border-color: #003572;
-        text-decoration: none; /* Prevent underline */
-    }
