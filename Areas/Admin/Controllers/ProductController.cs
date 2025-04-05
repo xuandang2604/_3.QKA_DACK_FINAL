@@ -12,6 +12,8 @@ using _3.QKA_DACK.Repositories.CartRepo;
 using _3.QKA_DACK.Repositories.CategoryRepo;
 using _3.QKA_DACK.Repositories.ProductRepo;
 using _3.QKA_DACK.Repositories.ReviewRepo;
+using _3.QKA_DACK.Repositories.BrandRepo;
+
 namespace _3.QKA_DACK.Areas.Admin.Controllers
 {
     [Area("Admin")]
@@ -23,11 +25,12 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ICartRepository _cartRepository;
-
+        private readonly IBrandRepository _brandRepository;
         private readonly IReviewRepository _reviewRepository;
 
         public ProductController(IProductRepository productRepository, ICategoryRepository categoryRepository,
-                                UserManager<ApplicationUser> userManager, ICartRepository cartRepository, IReviewRepository reviewRepository
+                                UserManager<ApplicationUser> userManager, ICartRepository cartRepository, IReviewRepository reviewRepository,
+                                IBrandRepository brandRepository
                                 )
         {
             _productRepository = productRepository;
@@ -35,7 +38,8 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
             _userManager = userManager;
             _cartRepository = cartRepository;
             _reviewRepository = reviewRepository;
-           
+            _brandRepository = brandRepository;
+
         }
 
 
@@ -68,6 +72,7 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
         //    return View(products);
 
         //}
+
 
         [AllowAnonymous]
         public async Task<IActionResult> Index(int? categoryId, string searchString, string sortOrder)
@@ -147,17 +152,91 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
 
         // Hiển thị form thêm sản phẩm mới
+        //[Authorize(Roles = "Admin,Employee")]
+        //[HttpGet("add")]
+        //public async Task<IActionResult> Add()
+        //{
+        //    var categories = await _categoryRepository.GetAllAsync();
+        //    ViewBag.Categories = new SelectList(categories, "Id", "Name");
+        //    return View();
+        //}
+        //[Authorize(Roles = "Admin,Employee")]
+        //// Xử lý thêm sản phẩm mới
+        //[HttpPost("add")]
+        //public async Task<IActionResult> Add(Product product, IFormFile imageUrl)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (imageUrl != null)
+        //        {
+        //            product.ImageUrl = await SaveImage(imageUrl);
+        //        }
+
+        //        await _productRepository.AddAsync(product);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    var categories = await _categoryRepository.GetAllAsync();
+        //    ViewBag.Categories = new SelectList(categories, "Id", "Name");
+        //    return View(product);
+        //}
+
+        // Hiển thị form thêm sản phẩm mới
+        //[Authorize(Roles = "Admin,Employee")]
+        //[HttpGet("add")]
+        //public async Task<IActionResult> Add()
+        //{
+        //    var categories = await _categoryRepository.GetAllAsync();
+        //    var brands = await _brandRepository.GetAllAsync();
+
+        //    ViewBag.Categories = new SelectList(categories, "Id", "Name");
+        //    ViewBag.Brands = new SelectList(brands, "Id", "Name");
+
+        //    return View();
+        //}
+
+        //[Authorize(Roles = "Admin,Employee")]
+        //// Xử lý thêm sản phẩm mới
+        //[HttpPost("add")]
+        //public async Task<IActionResult> Add(Product product, IFormFile imageUrl)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (imageUrl != null)
+        //        {
+        //            product.ImageUrl = await SaveImage(imageUrl);
+        //        }
+
+        //        await _productRepository.AddAsync(product);
+        //        return RedirectToAction(nameof(Index));
+        //    }
+
+        //    var categories = await _categoryRepository.GetAllAsync();
+        //    var brands = await _brandRepository.GetAllAsync();
+
+        //    ViewBag.Categories = new SelectList(categories, "Id", "Name");
+        //    ViewBag.Brands = new SelectList(brands, "Id", "Name");
+
+        //    return View(product);
+        //}
+
+
+
+
+
         [Authorize(Roles = "Admin,Employee")]
         [HttpGet("add")]
         public async Task<IActionResult> Add()
         {
-            var categories = await _categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+            ViewBag.Brands = new SelectList(await _brandRepository.GetAllAsync(), "Id", "Name");
             return View();
         }
+
         [Authorize(Roles = "Admin,Employee")]
         // Xử lý thêm sản phẩm mới
         [HttpPost("add")]
+        [HttpPost]
         public async Task<IActionResult> Add(Product product, IFormFile imageUrl)
         {
             if (ModelState.IsValid)
@@ -166,15 +245,22 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
                 {
                     product.ImageUrl = await SaveImage(imageUrl);
                 }
-
                 await _productRepository.AddAsync(product);
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", "Product");
             }
 
-            var categories = await _categoryRepository.GetAllAsync();
-            ViewBag.Categories = new SelectList(categories, "Id", "Name");
+            ViewBag.Categories = new SelectList(await _categoryRepository.GetAllAsync(), "Id", "Name");
+            ViewBag.Brands = new SelectList(await _brandRepository.GetAllAsync(), "Id", "Name");
             return View(product);
         }
+
+
+
+
+
+
+
+
 
         // Viết thêm hàm SaveImage để lưu hình ảnh
         private async Task<string> SaveImage(IFormFile image)
@@ -311,8 +397,28 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
             return View(product);
         }
-        [Authorize(Roles = "Admin")]
-        // Hiển thị form xác nhận xóa sản phẩm
+        //[Authorize(Roles = "Admin")]
+        //// Hiển thị form xác nhận xóa sản phẩm
+        //[HttpGet("delete/{id}")]
+        //public async Task<IActionResult> Delete(int id)
+        //{
+        //    var product = await _productRepository.GetByIdAsync(id);
+        //    if (product == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(product);
+        //}
+
+        //// Xử lý xóa sản phẩm
+        //[HttpPost("delete/{id}")]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    await _productRepository.DeleteAsync(id);
+        //    return RedirectToAction(nameof(Index));
+        //}
+        // Xử lý xóa sản phẩm (GET)
+        [Authorize(Roles = "Admin,Employee")]
         [HttpGet("delete/{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -324,13 +430,29 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
             return View(product);
         }
 
-        // Xử lý xóa sản phẩm
-        [HttpPost("delete/{id}")]
+        // Xử lý xóa sản phẩm (POST)
+        [Authorize(Roles = "Admin,Employee")]
+        [HttpPost("delete/{id}"), ActionName("Delete")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var product = await _productRepository.GetByIdAsync(id);
+            if (product == null)
+            {
+                return NotFound();
+            }
             await _productRepository.DeleteAsync(id);
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index"); // Quay lại trang danh sách sản phẩm
         }
+
+
+
+
+
+
+
+
+
+
 
         [HttpPost("addtocart")]
         [ValidateAntiForgeryToken]

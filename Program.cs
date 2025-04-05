@@ -18,6 +18,7 @@ using _3.QKA_DACK.Repositories.ReviewRepo;
 using Microsoft.AspNetCore.Mvc.Razor;
 using System.Reflection;
 using _3.QKA_DACK.Resources;
+using _3.QKA_DACK.Repositories.BrandRepo;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -93,6 +94,7 @@ builder.Services.AddScoped<ICartRepository, EFCartRepository>();
 builder.Services.AddScoped<IVnPayService, VnPayService>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
+builder.Services.AddScoped<IBrandRepository, EFBrandRepository>();
 
 builder.Services.AddScoped<IReviewRepository, EFReviewRepository>();
 

@@ -3,7 +3,10 @@ namespace _3.QKA_DACK.Repositories.BrandRepo
 {
     public interface IBrandRepository
     {
-        Task<IEnumerable<Brand>> GetAll();
-        Task<Brand> GetById(int id);
+        Task<IEnumerable<Brand>> GetAllAsync();
+        Task<Brand?> GetByIdAsync(int id);
+        Task AddAsync(Brand brand);
+        Task UpdateAsync(Brand brand);
+        Task DeleteAsync(int id);
     }
 }

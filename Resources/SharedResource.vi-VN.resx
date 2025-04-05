@@ -120,6 +120,9 @@
   <data name="Actions" xml:space="preserve">
     <value>Hành động</value>
   </data>
+  <data name="AddToCart" xml:space="preserve">
+    <value>Thêm vào giỏ</value>
+  </data>
   <data name="AllProducts" xml:space="preserve">
     <value>Sản phẩm</value>
   </data>

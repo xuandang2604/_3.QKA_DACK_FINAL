@@ -1,5 +1,6 @@
 ﻿using _3.QKA_DACK.Models;
 using _3.QKA_DACK.Models.BrandModels;
+using _3.QKA_DACK.Repositories.BrandRepo;
 using Microsoft.EntityFrameworkCore;
 
 namespace _3.QKA_DACK.Repositories.BrandRepo
@@ -13,17 +14,36 @@ namespace _3.QKA_DACK.Repositories.BrandRepo
             _context = context;
         }
 
-        public async Task<IEnumerable<Brand>> GetAll()
+        public async Task<IEnumerable<Brand>> GetAllAsync()
         {
-            var brands = await _context.Brands.ToListAsync();
-            Console.WriteLine($"Fetched brands: {brands.Count()}");
-            return brands;
+            return await _context.Brands.ToListAsync();
         }
 
-
-        public async Task<Brand> GetById(int id)
+        public async Task<Brand?> GetByIdAsync(int id)
         {
             return await _context.Brands.FindAsync(id);
+        }
+
+        public async Task AddAsync(Brand brand)
+        {
+            _context.Brands.Add(brand);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdateAsync(Brand brand)
+        {
+            _context.Brands.Update(brand);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var brand = await _context.Brands.FindAsync(id);
+            if (brand != null)
+            {
+                _context.Brands.Remove(brand);
+                await _context.SaveChangesAsync();
+            }
         }
     }
 }
