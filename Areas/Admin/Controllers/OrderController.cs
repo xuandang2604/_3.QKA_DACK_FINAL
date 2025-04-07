@@ -42,9 +42,9 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
             // Check role admin
             bool isAdmin = User.IsInRole("Admin");
-
+            bool isEmployee = User.IsInRole("Employee");
             // Nếu không phải admin và không phải order của mình => cấm truy cập
-            if (!isAdmin && order.UserId != currentUserId)
+            if (!isAdmin && order.UserId != currentUserId && !isEmployee)
             {
                 return Forbid(); // 403
             }

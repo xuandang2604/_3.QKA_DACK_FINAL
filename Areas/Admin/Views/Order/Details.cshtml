@@ -58,8 +58,14 @@
         <h5><i class="bi bi-coin text-warning"></i> <span class="text-danger">Tổng tiền: @Model.TotalAmount.ToString("N0")</span></h5>
     </div>
 
-    <form asp-action="CancelOrder" method="post"> 
-         <input type="hidden" name="orderId" value="@Model.Id" /> 
-         <button type="submit" class="btn btn-danger">Trở về</button> 
-     </form> 
+	@if (string.IsNullOrEmpty(Model.Status) && User.IsInRole("Employee"))
+    {
+    <form asp-action="CancelOrder" method="post">
+        <input type="hidden" name="orderId" value="@Model.Id" />
+        <button type="submit" class="btn btn-danger">Xóa Order</button>
+    </form>
+    }
+     <form asp-controller="Order" asp-action="Index">
+		<button type="submit" class="btn btn-primary mt-3">Quay lại</button>
+     </form>
 </div>

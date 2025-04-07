@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - MyApp</title>
+    <title>@ViewData["Title"] - _3.QKA_DACK</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -16,6 +16,20 @@
     <link rel="stylesheet" href="~/css/slicknav.min.css">
     <link rel="stylesheet" href="~/css/style.css">
     <style>
+
+        .inner-header .row {
+            align-items: center; /* Căn giữa theo chiều dọc */
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .logo img {
+            max-width: 100%; /* Giữ tỉ lệ ảnh tốt */
+            height: auto;
+            display: block;
+            margin: 0 auto; /* Căn giữa theo chiều ngang nếu cần */
+        }
+
         button.btn-success {
             background-color: #e7ab3c !important;
             border-color: #e7ab3c !important;
@@ -91,7 +105,7 @@
                         <div class="logo">
 
                             <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
-                                <img src="~/images/logo.png" alt="">
+                                <img src="~/images/logo.png"  style="max-width: 50%" alt="">
                             </a>
                  
                         </div>
@@ -178,6 +192,12 @@
                                         <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Admin Manager</a>
                                     </li>
                                 }
+                                @if(User.IsInRole("Employee"))
+                                {
+									<li>
+										<a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Employee Manager</a>
+									</li>
+                                }
                                 <li>
                                     <a class="nav-link" asp-area="" asp-controller="Order" asp-action="Index">My Orders</a>
                                 </li>
@@ -210,8 +230,8 @@
                             <li>Email: hello.colorlib@gmail.com</li>
                         </ul>
                         <div class="footer-social">
-                            <a href="#"><i class="bi bi-facebook"></i></a>
-                            <a href="#"><i class="bi bi-instagram"></i></a>
+                            <a href="https://www.facebook.com/nguyenlexuandangdeptraitailang/"><i class="bi bi-facebook"></i></a>
+                            <a href="https://www.instagram.com/caphedendakhongduongmoingay/"><i class="bi bi-instagram"></i></a>
                             <a href="#"><i class="bi bi-twitter-x"></i></a>
                             <a href="#"><i class="bi bi-pinterest"></i></a>
                         </div>

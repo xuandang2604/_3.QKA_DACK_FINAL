@@ -16,6 +16,7 @@
             <th><i class="fa-solid fa-envelope"></i> Email</th>
             <th><i class="fa-solid fa-calendar-days"></i> Ngày đặt</th>
             <th><i class="fa-solid fa-coins"></i> Tổng tiền</th>
+            <th><i class="fa-solid fa-anchor"></i>Tình trạng</th>
             <th><i class="fa-solid fa-gear"></i> Hành động</th>
         </tr>
     </thead>
@@ -28,8 +29,9 @@
                 <td>@order.User?.Email</td>
                 <td>@order.InvoiceDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
                 <td><strong>@order.TotalAmount.ToString("N0")</strong> VND</td>
+                <td>@(order.Status?? "Not Paid")</td>
                 <td>
-                    <a asp-action="Details" asp-route-orderId="@order.Id" class="btn btn-info text-white btn-sm">
+                    <a asp-area="Admin" asp-action="Details" asp-route-orderId="@order.Id" class="btn btn-info text-white btn-sm">
                         <i class="fa-solid fa-file-invoice"></i> Xem Chi Tiết
                     </a>
                 </td>
