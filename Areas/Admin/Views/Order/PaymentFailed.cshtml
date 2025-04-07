@@ -1,16 +1,17 @@
 ﻿@{
     ViewData["Title"] = "Thanh toán thất bại";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
 }
 
 <div class="text-center">
     <h2 class="text-danger">Thanh toán thất bại</h2>
     <p>Đã xảy ra lỗi khi xử lý thanh toán của bạn. Vui lòng thử lại hoặc kiểm tra đơn hàng.</p>
 
-    <a asp-area="Admin" asp-controller="Cart" asp-action="Index" class="btn btn-primary">
+    <a asp-area="" asp-controller="Cart" asp-action="Index" class="btn btn-primary">
         <i class="fas fa-shopping-cart"></i> Quay lại giỏ hàng
     </a>
 
-    <a asp-area="Admin" asp-controller="Order" asp-action="Index" class="btn btn-secondary">
+    <a asp-area="" asp-controller="Order" asp-action="Index" class="btn btn-secondary">
         <i class="fas fa-receipt"></i> Xem đơn hàng của tôi
     </a>
 </div>
