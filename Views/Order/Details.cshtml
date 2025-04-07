@@ -1,0 +1,66 @@
+﻿
+@model Order
+@using _3.QKA_DACK.Models.OrderModels
+@{
+    ViewData["Title"] = "Chi Tiết Đơn Hàng";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+<h2 class="text-center mb-4"><i class="bi bi-cart-check-fill"></i> Chi Tiết Đơn Hàng</h2>
+
+<div class="card p-3">
+
+    <!-- Thông tin khách hàng -->
+    <h5><i class="bi bi-person-circle text-warning"></i> <span class="text-primary">Thông Tin Khách Hàng</span></h5>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><i class="bi bi-person"></i> <b>Tên:</b> @Model.User?.UserName</li>
+        <li class="list-group-item"><i class="bi bi-envelope"></i> <b>Email:</b> @Model.User?.Email</li>
+        <li class="list-group-item"><i class="bi bi-telephone"></i> <b>Số điện thoại:</b> @Model.User?.PhoneNumber</li>
+    </ul>
+
+    <!-- Thông tin đặt hàng -->
+    <h5><i class="bi bi-briefcase-fill text-warning"></i> <span class="text-primary">Thông Tin Đặt Hàng</span></h5>
+    <ul class="list-group mb-3">
+        <li class="list-group-item"><i class="bi bi-clipboard"></i> <b>Mã đơn:</b> @Model.Id</li>
+        <li class="list-group-item"><i class="bi bi-calendar"></i> <b>Ngày đặt:</b> @Model.InvoiceDate.ToShortDateString()</li>
+        <li class="list-group-item"><i class="bi bi-geo-alt"></i> <b>Địa chỉ giao hàng:</b> @Model.User?.Address</li>
+        @* <li class="list-group-item"><i class="bi bi-chat-left-text"></i> <b>Ghi chú của khách:</b> @Model.Note</li> *@
+    </ul>
+
+    <!-- Sản phẩm trong đơn -->
+    <h5><i class="bi bi-box-seam text-warning"></i> <span class="text-success">Sản Phẩm Trong Đơn Hàng</span></h5>
+    <table class="table table-bordered table-striped mt-2">
+        <thead class="table-success">
+            <tr>
+                <th>Mã sản phẩm</th>
+                <th>Tên sản phẩm</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Thành tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.ProductId</td>
+                    <td>@item.Product?.Name</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("N0")</td>
+                    <td>@(item.Quantity * item.UnitPrice)</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <div class="text-end mt-2">
+        <h5><i class="bi bi-coin text-warning"></i> <span class="text-danger">Tổng tiền: @Model.TotalAmount.ToString("N0")</span></h5>
+    </div>
+
+    <form asp-action="CancelOrder" method="post"> 
+         <input type="hidden" name="orderId" value="@Model.Id" /> 
+         <button type="submit" class="btn btn-danger">Trở về</button> 
+     </form> 
+</div>

@@ -1,0 +1,40 @@
+﻿@model IEnumerable<Order>
+@using _3.QKA_DACK.Models.OrderModels
+@{
+    ViewData["Title"] = "Danh Sách Đơn Hàng";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<h2 class="mb-4">
+    <i class="fa-solid fa-clipboard"></i> Danh Sách Đơn Hàng
+</h2>
+
+<table class="table table-bordered text-center shadow-sm rounded">
+    <thead style="background-color: #cfe2ff;">
+        <tr>
+            <th><i class="fa-solid fa-hashtag"></i> ID Order</th>
+            <th><i class="fa-solid fa-user"></i> Khách hàng</th>
+            <th><i class="fa-solid fa-envelope"></i> Email</th>
+            <th><i class="fa-solid fa-calendar-days"></i> Ngày đặt</th>
+            <th><i class="fa-solid fa-coins"></i> Tổng tiền</th>
+            <th><i class="fa-solid fa-gear"></i> Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var order in Model)
+        {
+            <tr>
+                <td>@order.Id</td>
+                <td>@order.User?.UserName</td>
+                <td>@order.User?.Email</td>
+                <td>@order.InvoiceDate.ToString("dd/MM/yyyy HH:mm:ss")</td>
+                <td><strong>@order.TotalAmount.ToString("N0")</strong> VND</td>
+                <td>
+                    <a asp-action="Details" asp-route-orderId="@order.Id" class="btn btn-info text-white btn-sm">
+                        <i class="fa-solid fa-file-invoice"></i> Xem Chi Tiết
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

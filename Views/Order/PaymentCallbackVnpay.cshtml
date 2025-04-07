@@ -1,0 +1,11 @@
+﻿@model _3.QKA_DACK.Models.VNPay.PaymentResponseModel
+@{
+    ViewData["Title"] = "PaymentCallbackVnpay";
+    Layout = "~/Views/Shared/_LayoutUser.cshtml";
+}
+
+<h1>PaymentCallbackVnpay</h1>
+<p>Order Description: @Model.OrderDescription</p>
+<p>Payment Method: @Model.PaymentMethod</p>
+<p>Total Price: @Model.Amount</p>
+<p>Transaction Id: @Model.TransactionId</p>

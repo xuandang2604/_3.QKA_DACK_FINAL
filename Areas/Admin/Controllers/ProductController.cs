@@ -279,6 +279,10 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
             var categories = await _categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name", product.CategoryId);
+
+            var brands = await _brandRepository.GetAll();
+            ViewBag.Brands = new SelectList(brands, "Id", "Name", product.BrandId);
+
             return View(product);
         }
 
@@ -323,10 +327,13 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
             }
             var categories = await _categoryRepository.GetAllAsync();
             ViewBag.Categories = new SelectList(categories, "Id", "Name");
+
             var brands = await _brandRepository.GetAll();
-            ViewBag.Brand = new SelectList(brands, "Id", "Name");
+            ViewBag.Brands = new SelectList(brands, "Id", "Name");
+
             return View(product);
         }
+
         [Authorize(Roles = "Admin")]
         // Hiển thị form xác nhận xóa sản phẩm
         [HttpGet("delete/{id}")]

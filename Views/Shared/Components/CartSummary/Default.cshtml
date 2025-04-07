@@ -10,22 +10,45 @@
         font-family: "Arial", "Helvetica", "sans-serif";
         font-weight: lighter;
         font-size: 1rem;
-    }   
+    }
+
+    .cart-icon .btn {
+        display: flex;
+        align-items: center;
+        padding: 10px 20px;
+        border-radius: 25px;
+        box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.16);
+    }
+
+    .cart-icon i {
+        margin-right: 10px;
+        font-size: 1.25rem;
+    }
+
+    .cart-icon .fw-bold {
+        font-weight: bold;
+    }
 </style>
 
 @if (Model.CartItems.Any())
 {
-        <li class="nav-item">
-            <a class="nav-link" asp-area="Admin" asp-controller="Cart" asp-action="Index">
-                <i class="fa-solid fa-cart-shopping"></i> @LocService.GetLocalizedHtmlString("Cart") (@(Model.CartItems?.Count ?? 0))
-            </a>
-        </li>
+    <li class="cart-icon">
+        <form asp-controller="Cart" asp-action="Index" method="get">
+            <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm d-flex align-items-center">
+                <i class="fa-solid fa-cart-shopping me-2 fs-5"></i>
+                <span class="fw-bold">@LocService.GetLocalizedHtmlString("Cart") (@(Model.CartItems?.Count ?? 0))</span>
+            </button>
+        </form>
+    </li>
 }
 else
 {
-	<li class="nav-item">
-		<a class="nav-link" asp-area="Admin" asp-controller="Cart" asp-action="Index">
-			<i class="fa-solid fa-cart-shopping"></i> @LocService.GetLocalizedHtmlString("Cart")
-		</a>
-        </li>
+    <li class="cart-icon">
+        <form asp-controller="Cart" asp-action="Index" method="get">
+            <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm d-flex align-items-center">
+                <i class="fa-solid fa-cart-shopping me-2 fs-5"></i>
+                <span class="fw-bold">@LocService.GetLocalizedHtmlString("Cart")</span>
+            </button>
+        </form>
+    </li>
 }

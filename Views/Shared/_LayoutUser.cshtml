@@ -123,15 +123,10 @@
                                     <span></span>
                                 </a>
                             </li>
-                            <li class="cart-icon">
-                                <form asp-controller="Cart" asp-action="Index" method="get">
-                                    <button type="submit" class="btn btn-success px-4 py-2 rounded-pill shadow-sm d-flex align-items-center">
-                                        <i class="bi bi-cart-plus me-2 fs-5"></i>
-                                        <span class="fw-bold">Cart (<span id="cart-count">0</span>)</span>
-                                    </button>
-                                </form>
-
-
+                            <li class="cart-icon">                              
+                                <div class="navbar-nav" id="cart-summary">
+                                    @await Component.InvokeAsync("CartSummary")
+                                </div>
                             </li>
                             
                         </ul>
@@ -149,7 +144,8 @@
                         <!-- Menu danh mục -->
                         <div class="depart-hover">
                             <div class="col-lg-3 col-md-4 mb-4">
-                                @await Component.InvokeAsync("CategoryMenu")
+                                @await Component.InvokeAsync("CategoryMenu", new { area = "" })
+
                             </div>
                         </div>
                     </div>
@@ -183,7 +179,7 @@
                                     </li>
                                 }
                                 <li>
-                                    <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="MyOrders">My Orders</a>
+                                    <a class="nav-link" asp-area="" asp-controller="Order" asp-action="Index">My Orders</a>
                                 </li>
                             </ul>
                         </li>

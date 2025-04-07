@@ -2,9 +2,9 @@
 using _3.QKA_DACK.Models.VNPay;
 using _3.QKA_DACK.Repositories.VnPayRepo;
 
-namespace _3.QKA_DACK.Areas.Admin.Controllers
+namespace _3.QKA_DACK.Controllers
 {
-    [Area("Admin")]
+   
     public class PaymentController : Controller
     {
         private readonly IVnPayService _vnPayService;

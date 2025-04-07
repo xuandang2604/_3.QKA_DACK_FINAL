@@ -353,7 +353,7 @@ namespace _3.QKA_DACK.Controllers
             await _productRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
-
+        [Authorize]
         [HttpPost("addtocart")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddToCart(int productId, int quantity)

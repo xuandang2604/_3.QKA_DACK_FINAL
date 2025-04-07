@@ -45,7 +45,7 @@ namespace _3.QKA_DACK.Controllers
             var categories = await _categoryRepository.GetAllAsync() ?? new List<Category>();
 
             // Tìm tất cả danh mục cha (ParentCategory == NULL)
-            ViewBag.ParentCategories = categories.Where(c => c.ParentCategory == null).ToList();
+            ViewBag.ParentCategories = categories.Where(c => c.ParentCategoryId == null).ToList();
 
             // Lấy danh mục con nếu có categoryId
             if (categoryId.HasValue)
@@ -70,6 +70,7 @@ namespace _3.QKA_DACK.Controllers
                 // Lọc sản phẩm theo danh mục cha và con
                 products = products.Where(p => selectedCategoryIds.Contains((int)p.CategoryId)).ToList();
             }
+            products = products.Take(15).ToList();
 
             // Lấy thông tin thương hiệu cho từng sản phẩm
             foreach (var product in products)
