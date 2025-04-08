@@ -85,24 +85,7 @@ namespace _3.QKA_DACK.Controllers
             }
             var  OrderStatus = PaymentMethod.CompareTo("COD") == 0 ? "Pending" : null; // Đặt trạng thái đơn hàng là "Pending" nếu COD
             var Amount = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
-            var order = new Order
-            {
-                UserId = userId,
-                InvoiceDate = DateTime.Now,
-                Status = OrderStatus , // Đặt trạng thái đơn hàng là "Pending" nếu COD
-                TotalAmount = Amount,
-                OrderItems = cart.CartItems.Select(ci => new OrderItem
-                {
-                    ProductId = ci.ProductId,
-                    Quantity = ci.Quantity,
-                    UnitPrice = ci.Product.Price
-                }).ToList()
-            };
-
-            await _orderRepository.AddOrderAsync(order);
-            await _orderRepository.SaveChangesAsync();
-
-
+            
             // ✅ Gọi PaymentController để tạo URL VNPay
             //return RedirectToAction("CreatePaymentUrlVnpay", "Payment", new
             //{
@@ -115,8 +98,23 @@ namespace _3.QKA_DACK.Controllers
             if (PaymentMethod == "COD")
             {
                 // ✅ Nếu người dùng chọn COD, chuyển đến trang xác nhận
-                ClearCartAsync(cart);
-                await _cartRepository.SaveChangesAsync();
+                var order = new Order
+                {
+                    UserId = userId,
+                    InvoiceDate = DateTime.Now,
+                    Status = OrderStatus, // Đặt trạng thái đơn hàng là "Pending" nếu COD
+                    TotalAmount = Amount,
+                    OrderItems = cart.CartItems.Select(ci => new OrderItem
+                    {
+                        ProductId = ci.ProductId,
+                        Quantity = ci.Quantity,
+                        UnitPrice = ci.Product.Price
+                    }).ToList()
+                };
+
+                await _orderRepository.AddOrderAsync(order);
+                await _orderRepository.SaveChangesAsync();
+                await ClearCartAsync(cart);
                 return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
             }
             else

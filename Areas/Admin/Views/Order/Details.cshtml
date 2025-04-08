@@ -69,6 +69,10 @@
         <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
             <button type="submit" class="btn btn-success">Đã thanh toán</button>
         </form>
+        <form asp-area="Admin" asp-action="CancelOrder" method="post">
+            <input type="hidden" name="orderId" value="@Model.Id" />
+            <button type="submit" class="btn btn-danger">Xóa Order</button>
+        </form>
     }
 
      <form asp-controller="Order" asp-action="Index">

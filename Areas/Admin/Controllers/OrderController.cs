@@ -74,7 +74,7 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
                 await _orderRepository.SaveChangesAsync();
             }
 
-            return RedirectToAction("Index", "Cart");
+            return RedirectToAction("Index");
         }
 
         //[HttpGet]

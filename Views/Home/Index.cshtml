@@ -69,13 +69,22 @@
                     <div class="product-item">
                         <div class="pi-pic">
                             <img src="@item.ImageUrl" alt="@item.Name" style="height: 300px; width: 100%;">
-                            <div class="icon">
-                                <i class="icon_heart_alt"></i>
-                            </div>
+                             <div class="icon"> 
+                                 <i class="icon_heart_alt"></i> 
+                             </div>
                             <ul>
                                 <li class="w-icon active">
-                                    <a href="#"><i class="icon_bag_alt"></i></a>
+                                    <a href="#" onclick="submitAddToCart(@item.Id)">
+                                        <i class="icon_bag_alt"></i>
+                                    </a>
                                 </li>
+
+                                <form id="addToCartForm-@item.Id" asp-area="" asp-controller="Cart" asp-action="AddToCart" method="post" style="display:none;">
+                                    <input type="hidden" name="productId" value="@item.Id" />
+                                    <input type="hidden" name="quantity" value="1" />
+                                </form>
+                              
+                                
                                 <li class="quick-view">
                                     <a asp-area=""  asp-controller="Product" asp-action="Display" asp-route-id="@item.Id">+ Quick View</a>
                                 </li>
@@ -205,4 +214,5 @@
             });
         });
     });
+
 </script>

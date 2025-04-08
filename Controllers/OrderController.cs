@@ -146,6 +146,26 @@ namespace _3.QKA_DACK.Controllers
 
                 return RedirectToAction("PaymentSuccess");
             }
+            else
+            {
+                var userId = _userManager.GetUserId(User);
+                var cart = await _cartRepository.GetCartByUserIdAsync(userId);
+                var order = new Order
+                {
+                    UserId = userId,
+                    InvoiceDate = DateTime.Now,
+                    OrderItems = cart.CartItems.Select(ci => new OrderItem
+                    {
+                        ProductId = ci.ProductId,
+                        Quantity = ci.Quantity,
+                        UnitPrice = ci.Product.Price
+                    }).ToList(),
+                    TotalAmount = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price),
+                    Status = null
+                };
+                await _orderRepository.AddOrderAsync(order);
+                await _orderRepository.SaveChangesAsync();
+            }
 
             return RedirectToAction("PaymentFailed"); // ✅ Nếu thất bại, điều hướng sang trang thất bại
         }
