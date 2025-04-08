@@ -12,7 +12,7 @@ using _3.QKA_DACK.Models.CartModels;
 namespace _3.QKA_DACK.Areas.Admin.Controllers
 {
     [Area("Admin")]
-
+    
     public class OrderController : Controller
     {
         private readonly ICartRepository _cartRepository;
@@ -30,28 +30,39 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
         public async Task<IActionResult> Details(int orderId)
         {
+            // Lấy đơn hàng dựa trên orderId
             var order = await _orderRepository.GetOrderByIdAsync(orderId);
-            order.User = await _userManager.FindByIdAsync(order.UserId);
+
+            // Kiểm tra nếu order không tồn tại
             if (order == null)
             {
                 return NotFound();
             }
 
-            // Lấy UserId hiện tại
-            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
-
-            // Check role admin
-            bool isAdmin = User.IsInRole("Admin");
-            bool isEmployee = User.IsInRole("Employee");
-            // Nếu không phải admin và không phải order của mình => cấm truy cập
-            if (!isAdmin && order.UserId != currentUserId && !isEmployee)
+            // Lấy thông tin người dùng từ UserId trong order
+            if (!string.IsNullOrEmpty(order.UserId))
             {
-                return Forbid(); // 403
+                order.User = await _userManager.FindByIdAsync(order.UserId);
             }
 
-            return View(order);
+            // Lấy UserId hiện tại từ phiên đăng nhập
+            var currentUserId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+
+            // Kiểm tra quyền truy cập
+            bool isAdmin = User.IsInRole("Admin");
+            bool isEmployee = User.IsInRole("Employee");
+
+            // Nếu không phải Admin hoặc Employee, chỉ cho phép Customer xem order của chính họ
+            if (!isAdmin && !isEmployee && order.UserId != currentUserId)
+            {
+                return Forbid(); // Không có quyền truy cập (403)
+            }
+
+            return View(order); // Trả về View với thông tin đơn hàng
         }
 
+
+        [Authorize(Roles = "Admin, Employee")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CancelOrder(int orderId)
@@ -74,7 +85,7 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
         //    return View(response);
         //}
-      
+        
         public async Task<IActionResult> Index()
         {
             bool isAdmin = User.IsInRole("Admin");
@@ -97,7 +108,7 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
             return View(orders);
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IActionResult> PaymentCallbackVnpay()
         {
@@ -149,20 +160,20 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
 
             return RedirectToAction("PaymentFailed"); // ✅ Nếu thất bại, điều hướng sang trang thất bại
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult PaymentFailed()
         {
             return View();
         }
-
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult PaymentSuccess()
         {
             return View();
         }
 
-
+        [Authorize(Roles = "Admin, Employee")]
 
         //Hien thi doanh thu theo thang
         public async Task<IActionResult> MonthlyRevenue()
@@ -177,7 +188,18 @@ namespace _3.QKA_DACK.Areas.Admin.Controllers
         }
 
 
+        [HttpPost("update-status/{id}")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateStatus(int id)
+        {
+            var order = await _orderRepository.GetOrderByIdAsync(id);
+            if (order == null) return NotFound();
 
+            order.Status = "Paid";
+            await _orderRepository.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
     }
 
 

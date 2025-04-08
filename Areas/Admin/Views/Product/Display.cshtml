@@ -13,7 +13,7 @@
                     <h2 class="card-title text-center">@Model.Product.Name</h2>
                     <hr />
                     <h3 class="text-danger">Price: @Model.Product.Price</h3>
-                    <p class="card-text"><strong>Description:</strong> @Model.Product.Description</p>
+                    <p class="card-text"><strong>Description:</strong> @Html.Raw(Model.Product.Description)</p>
                     @if (!string.IsNullOrEmpty(Model.Product.ImageUrl))
                     {
                         <div class="text-center">

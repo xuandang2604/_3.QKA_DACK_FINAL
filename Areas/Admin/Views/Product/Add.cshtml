@@ -2,7 +2,6 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using _3.QKA_DACK.Models.ProductModels
 @{
-    
     Layout = "~/Views/Shared/_Layout.cshtml";
     ViewData["Title"] = "Add Product";
 }
@@ -59,6 +58,7 @@
     <img src="" alt="Product Image" style="max-width:200px;" id="previewImage" />
 </div>
 
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 <script>
     document.getElementById('imageInput').addEventListener('change', function (event) {
         const file = event.target.files[0];
@@ -74,4 +74,6 @@
             document.getElementById('imagePreviewContainer').style.display = 'none';
         }
     });
+
+    CKEDITOR.replace('editor');
 </script>

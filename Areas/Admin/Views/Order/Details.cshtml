@@ -60,11 +60,17 @@
 
 	@if (string.IsNullOrEmpty(Model.Status) && User.IsInRole("Employee"))
     {
-    <form asp-action="CancelOrder" method="post">
+    <form asp-area="Admin" asp-action="CancelOrder" method="post">
         <input type="hidden" name="orderId" value="@Model.Id" />
         <button type="submit" class="btn btn-danger">Xóa Order</button>
     </form>
     }
+	@if (Model.Status == "Pending" && User.IsInRole("Employee")){
+        <form asp-action="UpdateStatus" asp-route-id="@Model.Id" method="post">
+            <button type="submit" class="btn btn-success">Đã thanh toán</button>
+        </form>
+    }
+
      <form asp-controller="Order" asp-action="Index">
 		<button type="submit" class="btn btn-primary mt-3">Quay lại</button>
      </form>

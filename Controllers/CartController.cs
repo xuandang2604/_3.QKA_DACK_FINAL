@@ -73,7 +73,7 @@ namespace _3.QKA_DACK.Controllers
 
         [HttpPost("pay")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Pay()
+        public async Task<IActionResult> Pay(string PaymentMethod)
         {
             var userId = _userManager.GetUserId(User);
             if (userId == null) return RedirectToAction("Login", "Account");
@@ -83,56 +83,67 @@ namespace _3.QKA_DACK.Controllers
             {
                 return RedirectToAction("Index");
             }
+            var  OrderStatus = PaymentMethod.CompareTo("COD") == 0 ? "Pending" : null; // Đặt trạng thái đơn hàng là "Pending" nếu COD
             var Amount = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
+            var order = new Order
+            {
+                UserId = userId,
+                InvoiceDate = DateTime.Now,
+                Status = OrderStatus , // Đặt trạng thái đơn hàng là "Pending" nếu COD
+                TotalAmount = Amount,
+                OrderItems = cart.CartItems.Select(ci => new OrderItem
+                {
+                    ProductId = ci.ProductId,
+                    Quantity = ci.Quantity,
+                    UnitPrice = ci.Product.Price
+                }).ToList()
+            };
+
+            await _orderRepository.AddOrderAsync(order);
+            await _orderRepository.SaveChangesAsync();
+
 
             // ✅ Gọi PaymentController để tạo URL VNPay
-            return RedirectToAction("CreatePaymentUrlVnpay", "Payment", new
+            //return RedirectToAction("CreatePaymentUrlVnpay", "Payment", new
+            //{
+            //    Name = User.Identity.Name,
+            //    Amount = Amount ,
+            //    OrderDescription = "Thanh toán đơn hàng",
+            //    OrderType = "order"
+            //});
+
+            if (PaymentMethod == "COD")
             {
-                Name = User.Identity.Name,
-                Amount = Amount ,
-                OrderDescription = "Thanh toán đơn hàng",
-                OrderType = "order"
-            });
+                // ✅ Nếu người dùng chọn COD, chuyển đến trang xác nhận
+                ClearCartAsync(cart);
+                await _cartRepository.SaveChangesAsync();
+                return RedirectToAction("OrderConfirmation", new { orderId = order.Id });
+            }
+            else
+            {
+                // ✅ Nếu chọn VNPay, tạo URL thanh toán VNPay
+                return RedirectToAction("CreatePaymentUrlVnpay", "Payment", new
+                {
+                    Name = User.Identity.Name,
+                    Amount = Amount,
+                    OrderDescription = "Thanh toán đơn hàng",
+                    OrderType = "order"
+                });
+            }
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ConfirmOrder(Order order)
-        //{
-        //    var userId = _userManager.GetUserId(User);
 
-        //    if (userId == null) return RedirectToAction("Login", "Account");
-        //    order.UserId = userId;
-        //    var user = await _userManager.FindByIdAsync(userId);
-        //    if (user != null && string.IsNullOrEmpty(user.FullName))
-        //    {
-        //        user.FullName = "Guest";
-        //        await _userManager.UpdateAsync(user);
-        //    }
-
-        //    var cart = await _cartRepository.GetCartByUserIdAsync(userId);
-        //    if (cart == null || !cart.CartItems.Any())
-        //    {
-        //        return RedirectToAction("Index");
-        //    }
-
-        //    order.UserId = userId;
-        //    order.InvoiceDate = DateTime.Now;
-        //    order.OrderItems = cart.CartItems.Select(ci => new OrderItem
-        //    {
-        //        ProductId = ci.ProductId,
-        //        Quantity = ci.Quantity,
-        //        UnitPrice = ci.Product.Price
-        //    }).ToList();
-        //    order.TotalAmount = cart.CartItems.Sum(ci => ci.Quantity * ci.Product.Price);
-
-        //    await _orderRepository.AddOrderAsync(order);
-        //    await _orderRepository.SaveChangesAsync();
-        //    await ClearCartAsync(cart);
-
-        //    return RedirectToAction("PaymentSuccess", "Order");
-        //}
-
+        public IActionResult OrderConfirmation(int orderId)
+        {
+            var orderTask = _orderRepository.GetOrderByIdAsync(orderId);
+            var order = orderTask.Result;
+            if (order == null || order.UserId != _userManager.GetUserId(User))
+            {
+                return RedirectToAction("Index");
+            }
+            
+            return View(order);
+        }
         public async Task ClearCartAsync(Cart cart)
         {
             cart.CartItems.Clear();

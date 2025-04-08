@@ -44,7 +44,16 @@ else
     <p>Total Quantity: @Model.CartItems.Sum(ci => ci.Quantity)</p>
     <p>Total Price: @Model.CartItems.Sum(ci => ci.Product.Price * ci.Quantity)</p>
      <form asp-area="" asp-action="Pay" method="post"> 
-         <button type="submit" class="btn btn-success">Pay</button> 
+         @* <button type="submit" class="btn btn-success">Pay</button>  *@
+
+        <div>
+            <label>Payment Method:</label>
+            <select name="PaymentMethod" class="form-control">
+                <option value="VNPay">Pay with VNPay</option>
+                <option value="COD">COD</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Pay</button>
      </form> 
 
 }

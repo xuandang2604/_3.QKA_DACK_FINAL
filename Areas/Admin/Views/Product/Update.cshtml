@@ -2,8 +2,8 @@
 @using Microsoft.AspNetCore.Mvc.Rendering
 @using _3.QKA_DACK.Models.ProductModels
 @{
-	Layout = "~/Views/Shared/_Layout.cshtml";
-	ViewData["Title"] = "Edit Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Edit Product";
 }
 <h2>Update Product</h2>
 <form asp-action="update" method="post" enctype="multipart/form-data">
@@ -67,6 +67,8 @@
     <img src="" alt="Product Image" style="max-width:200px;" id="previewImage" />
 </div>
 
+<!-- CKEditor CDN -->
+<script src="https://cdn.ckeditor.com/4.16.2/standard/ckeditor.js"></script>
 <script>
     document.getElementById('imageInput').addEventListener('change', function (event) {
         const file = event.target.files[0];
@@ -85,4 +87,7 @@
             hiddenImageUrl.value = "@Model.ImageUrl"; // Reset the hidden field if no new image is selected
         }
     });
+
+    // Initialize CKEditor
+    CKEDITOR.replace('editor');
 </script>

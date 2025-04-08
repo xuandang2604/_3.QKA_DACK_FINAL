@@ -25,7 +25,7 @@
                             <h2 class="card-title">@Model.Product.Name</h2>
                             <hr />
                             <h3 class="text-danger">Price: @Model.Product.Price.ToString("C")</h3>
-                            <p class="card-text"><strong>Description:</strong> @Model.Product.Description</p>
+                            <p class="card-text"><strong>Description:</strong>  @Html.Raw(Model.Product.Description)</p>
 
                             @if (User.Identity.IsAuthenticated)
                             {
@@ -86,35 +86,43 @@
 
                     <!-- Add Review Form -->
                     <h4 class="mt-4">Add a Review</h4>
-                    <form method="post" action="@Url.Action("AddReview", "Product")">
-                        <input type="hidden" name="ProductId" value="@Model.Product.Id" />
-                        <div class="form-group">
-                            <label for="rating">Rating</label>
-                            <div class="star-rating">
-                                <input type="radio" name="Rating" id="star5" value="5" />
-                                <label for="star5" class="fa fa-star"></label>
-                                <input type="radio" name="Rating" id="star4" value="4" />
-                                <label for="star4" class="fa fa-star"></label>
-                                <input type="radio" name="Rating" id="star3" value="3" />
-                                <label for="star3" class="fa fa-star"></label>
-                                <input type="radio" name="Rating" id="star2" value="2" />
-                                <label for="star2" class="fa fa-star"></label>
-                                <input type="radio" name="Rating" id="star1" value="1" />
-                                <label for="star1" class="fa fa-star"></label>
+                    @if(User.Identity.IsAuthenticated){
+                        <form method="post" action="@Url.Action("AddReview", "Product")">
+                            <input type="hidden" name="ProductId" value="@Model.Product.Id" />
+                            <div class="form-group">
+                                <label for="rating">Rating</label>
+                                <div class="star-rating">
+                                    <input type="radio" name="Rating" id="star5" value="5" />
+                                    <label for="star5" class="fa fa-star"></label>
+                                    <input type="radio" name="Rating" id="star4" value="4" />
+                                    <label for="star4" class="fa fa-star"></label>
+                                    <input type="radio" name="Rating" id="star3" value="3" />
+                                    <label for="star3" class="fa fa-star"></label>
+                                    <input type="radio" name="Rating" id="star2" value="2" />
+                                    <label for="star2" class="fa fa-star"></label>
+                                    <input type="radio" name="Rating" id="star1" value="1" />
+                                    <label for="star1" class="fa fa-star"></label>
+                                </div>
                             </div>
+                            <div class="form-group">
+                                <textarea name="Comment" class="form-control" placeholder="Add your comment..." required></textarea>
+                            </div>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <button type="submit" class="btn btn-primary">Submit Review</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-primary" onclick="redirectToLogin()">Submit Review</button>
+                            }
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-warning mt-3">
+                            Please <a href="/Identity/Account/Login?returnUrl=@Context.Request.Path">log in</a> to give a review.
                         </div>
-                        <div class="form-group">
-                            <textarea name="Comment" class="form-control" placeholder="Add your comment..." required></textarea>
-                        </div>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <button type="submit" class="btn btn-primary">Submit Review</button>
-                        }
-                        else
-                        {
-                            <button type="button" class="btn btn-primary" onclick="redirectToLogin()">Submit Review</button>
-                        }
-                    </form>
+                    }
                 </div>
             </div>
         </div>
@@ -147,55 +155,3 @@
             color: #f5b301;
         }
 </style>
-@*<script>
-    function redirectToLogin() {
-        const returnUrl = window.location.pathname + window.location.search;
-        window.location.href = '/Identity/Account/Login?returnUrl=' + encodeURIComponent(returnUrl);
-    }
-</script>*@
-
-<script>
-    function redirectToLogin() {
-        // Lấy dữ liệu form
-        const rating = document.querySelector('input[name="Rating"]:checked')?.value;
-        const comment = document.querySelector('textarea[name="Comment"]').value;
-        const productId = document.querySelector('input[name="ProductId"]').value;
-
-        // Lưu dữ liệu vào localStorage
-        localStorage.setItem('pendingReview', JSON.stringify({
-            rating: rating,
-            comment: comment,
-            productId: productId
-        }));
-
-        // Chuyển đến login (giữ lại returnUrl)
-        const returnUrl = window.location.pathname + window.location.search;
-        window.location.href = 'Identity/Account/Login?returnUrl=' + encodeURIComponent(returnUrl);
-    }
-
-    // Sau khi quay lại từ login
-    window.addEventListener('DOMContentLoaded', () => {
-        const saved = localStorage.getItem('pendingReview');
-        if (saved) {
-            const review = JSON.parse(saved);
-
-            if (review.rating) {
-                const star = document.querySelector(`input[name="Rating"][value="${review.rating}"]`);
-                if (star) star.checked = true;
-            }
-
-            if (review.comment) {
-                const textarea = document.querySelector('textarea[name="Comment"]');
-                if (textarea) textarea.value = review.comment;
-            }
-
-            if (review.productId) {
-                const productInput = document.querySelector('input[name="ProductId"]');
-                if (productInput) productInput.value = review.productId;
-            }
-
-            // Xóa khỏi localStorage sau khi load lại
-            localStorage.removeItem('pendingReview');
-        }
-    });
-</script>
