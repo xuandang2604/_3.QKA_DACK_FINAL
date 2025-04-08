@@ -106,7 +106,14 @@
                         <div class="form-group">
                             <textarea name="Comment" class="form-control" placeholder="Add your comment..." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <button type="submit" class="btn btn-primary">Submit Review</button>
+                        }
+                        else
+                        {
+                            <button type="button" class="btn btn-primary" onclick="redirectToLogin()">Submit Review</button>
+                        }
                     </form>
                 </div>
             </div>
@@ -140,3 +147,55 @@
             color: #f5b301;
         }
 </style>
+@*<script>
+    function redirectToLogin() {
+        const returnUrl = window.location.pathname + window.location.search;
+        window.location.href = '/Identity/Account/Login?returnUrl=' + encodeURIComponent(returnUrl);
+    }
+</script>*@
+
+<script>
+    function redirectToLogin() {
+        // Lấy dữ liệu form
+        const rating = document.querySelector('input[name="Rating"]:checked')?.value;
+        const comment = document.querySelector('textarea[name="Comment"]').value;
+        const productId = document.querySelector('input[name="ProductId"]').value;
+
+        // Lưu dữ liệu vào localStorage
+        localStorage.setItem('pendingReview', JSON.stringify({
+            rating: rating,
+            comment: comment,
+            productId: productId
+        }));
+
+        // Chuyển đến login (giữ lại returnUrl)
+        const returnUrl = window.location.pathname + window.location.search;
+        window.location.href = 'Identity/Account/Login?returnUrl=' + encodeURIComponent(returnUrl);
+    }
+
+    // Sau khi quay lại từ login
+    window.addEventListener('DOMContentLoaded', () => {
+        const saved = localStorage.getItem('pendingReview');
+        if (saved) {
+            const review = JSON.parse(saved);
+
+            if (review.rating) {
+                const star = document.querySelector(`input[name="Rating"][value="${review.rating}"]`);
+                if (star) star.checked = true;
+            }
+
+            if (review.comment) {
+                const textarea = document.querySelector('textarea[name="Comment"]');
+                if (textarea) textarea.value = review.comment;
+            }
+
+            if (review.productId) {
+                const productInput = document.querySelector('input[name="ProductId"]');
+                if (productInput) productInput.value = review.productId;
+            }
+
+            // Xóa khỏi localStorage sau khi load lại
+            localStorage.removeItem('pendingReview');
+        }
+    });
+</script>

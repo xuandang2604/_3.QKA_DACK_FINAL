@@ -70,7 +70,7 @@ namespace _3.QKA_DACK.Controllers
                 // Lọc sản phẩm theo danh mục cha và con
                 products = products.Where(p => selectedCategoryIds.Contains((int)p.CategoryId)).ToList();
             }
-            products = products.Take(30).ToList();
+            products = products.Take(50).ToList();
 
             // Lấy thông tin thương hiệu cho từng sản phẩm
             foreach (var product in products)

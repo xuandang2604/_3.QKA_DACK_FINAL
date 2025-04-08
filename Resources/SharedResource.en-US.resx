@@ -120,8 +120,17 @@
   <data name="Actions" xml:space="preserve">
     <value>Actions</value>
   </data>
+  <data name="AddCate" xml:space="preserve">
+    <value>Add Category</value>
+  </data>
+  <data name="AddProduct" xml:space="preserve">
+    <value>Add Product</value>
+  </data>
   <data name="All Products" xml:space="preserve">
     <value>All Products</value>
+  </data>
+  <data name="AllCate" xml:space="preserve">
+    <value>All Categories</value>
   </data>
   <data name="Cart" xml:space="preserve">
     <value>Cart</value>
@@ -132,8 +141,14 @@
   <data name="Contact" xml:space="preserve">
     <value>Contact Us</value>
   </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
   <data name="Hello" xml:space="preserve">
     <value>Hello</value>
@@ -179,6 +194,9 @@
   </data>
   <data name="Sort" xml:space="preserve">
     <value>Sort</value>
+  </data>
+  <data name="Turnover" xml:space="preserve">
+    <value>Turnover</value>
   </data>
   <data name="View" xml:space="preserve">
     <value>View</value>

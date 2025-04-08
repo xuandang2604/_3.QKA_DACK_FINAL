@@ -1,4 +1,4 @@
-﻿<ul class="list-group">
+﻿@*<ul class="list-group">
     @foreach (var parentCategory in Model)
     {
         <li class="list-group-item position-relative">
@@ -47,4 +47,121 @@
         display: block;
     }
 
+</style> *@
+
+
+
+
+<ul class="list-group category-menu">
+    @foreach (var parentCategory in Model)
+    {
+        <li class="list-group-item parent-item">
+            <a href="@Url.Action("Index", new { categoryId = parentCategory.Id })" class="text-decoration-none text-dark fw-bold">
+                @parentCategory.Name
+            </a>
+
+            @if (parentCategory.SubCategories != null && parentCategory.SubCategories.Count > 0)
+            {
+                <ul class="list-group sub-menu">
+                    @foreach (var childCategory in parentCategory.SubCategories)
+                    {
+                        <li class="list-group-item child-item">
+                            <a href="@Url.Action("Index", new { categoryId = childCategory.Id })" class="text-decoration-none text-dark">
+                                @childCategory.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            }
+        </li>
+    }
+</ul>
+<style>
+    /* Tổng thể menu */
+    .category-menu {
+        width: 220px;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Danh mục cha */
+    .parent-item {
+        position: relative;
+        background-color: lightblue;
+        border: none;
+        transition: background-color 0.3s ease;
+    }
+
+        .parent-item:hover {
+            background-color: #f8f9fa;
+        }
+
+    /* Submenu */
+    .sub-menu {
+        display: block;
+        visibility: hidden;
+        opacity: 0;
+        transform: translateX(10px);
+        transition: all 0.3s ease;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        min-width: 200px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+        z-index: 1050;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Khi hover vào danh mục cha, submenu trượt ra */
+    .parent-item:hover .sub-menu {
+        visibility: visible;
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Item con */
+    .child-item {
+        padding: 10px 16px;
+        background-color: #fff;
+        transition: background-color 0.25s ease, transform 0.2s ease;
+        cursor: pointer;
+    }
+
+        .child-item:hover {
+            background-color: #f1f1f1;
+            transform: translateX(4px);
+            color: #ff6600;
+        }
+
+        /* Font chữ chung */
+        .category-menu, .parent-item a, .child-item a {
+            font-family: 'Segoe UI', sans-serif;
+            font-size: 16px;
+            font-weight: 600; /* chữ đậm */
+            color: #333;
+            text-decoration: none;
+        }
+
+            /* Hover chữ con */
+            .child-item a:hover {
+                color: #ff6600; /* màu nổi bật khi hover */
+            }
+
+            /* Hover danh mục cha */
+            .parent-item a:hover {
+                color: #ff6600;
+            }
+
+    /* Giao diện từng item */
+    .parent-item, .child-item {
+        padding: 12px 18px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+        /* Hover nhẹ nền */
+        .parent-item:hover,
+        .child-item:hover {
+            background-color: #f9f9f9;
+        }
 </style>

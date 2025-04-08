@@ -55,11 +55,11 @@
 
                                         @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                                         {
-                                            <a asp-action="Update" asp-route-id="@product.Id" class="btn btn-warning">Edit</a>
+                                            <a asp-action="Update" asp-route-id="@product.Id" class="btn btn-warning">@LocService.GetLocalizedHtmlString("Edit")</a>
                                         }
                                         @if (User.IsInRole("Admin"))
                                         {
-                                            <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">Delete</a>
+                                            <a asp-action="Delete" asp-route-id="@product.Id" class="btn btn-danger btn-sm">@LocService.GetLocalizedHtmlString("Delete")</a>
                                         }
                                         @if (User.IsInRole("Customer"))
                                         {

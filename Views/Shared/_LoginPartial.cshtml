@@ -9,12 +9,12 @@
     {
         <li class="auth-item">
             <a id="manage" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
-                Hello @UserManager.GetUserName(User)!
+                @LocService.GetLocalizedHtmlString("Hello") @UserManager.GetUserName(User)!
             </a>
         </li>
         <li class="auth-item">
             <form id="logoutForm" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                <button id="logout" type="submit">Logout</button>
+                <button id="logout" type="submit">@LocService.GetLocalizedHtmlString("Logout")</button>
             </form>
         </li>
     }

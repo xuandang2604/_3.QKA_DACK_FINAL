@@ -75,26 +75,34 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">
-                            <i class="fa-solid fa-box"></i> @LocService.GetLocalizedHtmlString("AllProducts")
-                        </a>
-                    </li>
+					@if (User.IsInRole("Customer"))
+					{
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Index">
+                                <i class="fa-solid fa-box"></i> @LocService.GetLocalizedHtmlString("AllProducts")
+                            </a>
+                        </li>
+					})
                     @if (User.IsInRole("Admin") || User.IsInRole("Employee"))
                     {
                         <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">
+                                <i class="fa-solid fa-box"></i> @LocService.GetLocalizedHtmlString("AllProducts")
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Add">
-                                <i class="fa-solid fa-circle-plus"></i> Add Product
+                                <i class="fa-solid fa-circle-plus"></i> @LocService.GetLocalizedHtmlString("AddProduct")
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Index">
-                                <i class="fa-solid fa-layer-group"></i> All Categories
+                                <i class="fa-solid fa-layer-group"></i> @LocService.GetLocalizedHtmlString("AllCate")
                             </a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Categories" asp-action="Add">
-                                <i class="fa-solid fa-square-plus"></i> Add Category
+                                <i class="fa-solid fa-square-plus"></i> @LocService.GetLocalizedHtmlString("AddCate")
                             </a>
                         </li>
                     }
@@ -102,24 +110,30 @@
                     {
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="MonthlyRevenue">
-                                <i class="fa-solid fa-chart-line"></i> Turnover
+                                <i class="fa-solid fa-chart-line"></i> @LocService.GetLocalizedHtmlString("Turnover")
                             </a>
                         </li>
                     }
-                    <li class="nav-item">
+                </ul>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="nav-item">
                         <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">
                             <i class="fa-solid fa-receipt"></i> @LocService.GetLocalizedHtmlString("Orders")
                         </a>
-                    </li>
-                </ul>
+                    </div>
+                }
+                @if(User.IsInRole("Customer")){
+                    <div class="navbar-nav" id="cart-summary">
+                        @await Component.InvokeAsync("CartSummary")
+                    </div>
+                }
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
                     <ul class="navbar-nav flex-grow-1">
                         @await Html.PartialAsync("_SetLanguaguePartial")
                     </ul>
                 </div>
-                <div class="navbar-nav" id="cart-summary">
-                    @await Component.InvokeAsync("CartSummary")
-                </div>
+
                 <partial name="_LoginPartial" />
             </div>
         </div>
